@@ -221,6 +221,7 @@ module.exports = function (webpackEnv) {
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
+      // 默认/  可以通过package.json.homepage修改
       publicPath: paths.publicUrlOrPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
@@ -237,10 +238,12 @@ module.exports = function (webpackEnv) {
       // module chunks which are built will work in web workers as well.
       globalObject: 'this',
     },
+    // 优化压缩等
     optimization: {
       minimize: isEnvProduction,
       minimizer: [
         // This is only used in production mode
+        // 压缩js插件
         new TerserPlugin({
           terserOptions: {
             parse: {
@@ -282,6 +285,7 @@ module.exports = function (webpackEnv) {
           sourceMap: shouldUseSourceMap,
         }),
         // This is only used in production mode
+        // 压缩css
         new OptimizeCSSAssetsPlugin({
           cssProcessorOptions: {
             parser: safePostCssParser,
@@ -304,6 +308,7 @@ module.exports = function (webpackEnv) {
       // Automatically split vendor and commons
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+      // 分割打包一些三方库，或者动态引入的import
       splitChunks: {
         chunks: 'all',
         name: isEnvDevelopment,
@@ -315,6 +320,7 @@ module.exports = function (webpackEnv) {
         name: entrypoint => `runtime-${entrypoint.name}`,
       },
     },
+    // 解析相关
     resolve: {
       // This allows you to set a fallback for where webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"
