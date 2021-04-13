@@ -1,6 +1,6 @@
 'use strict';
 
-// Do this as the first thing so that any code reading it knows the right env.
+// 定义环境变量
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
 
@@ -11,7 +11,7 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 
-// Ensure environment variables are read.
+// 加载 .env 环境变量
 require('../config/env');
 
 
@@ -36,15 +36,17 @@ const getClientEnvironment = require('../config/env');
 const react = require(require.resolve('react', { paths: [paths.appPath] }));
 
 const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
+
+// 是否使用yarn
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
 
-// Warn and crash if required files are missing
+// 检查是否包含必要文件
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
-// Tools like Cloud9 rely on this.
+// 定义默认端口号
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
@@ -67,6 +69,7 @@ if (process.env.HOST) {
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
+// 检查浏览器
 const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
